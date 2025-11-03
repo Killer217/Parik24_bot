@@ -1,52 +1,42 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import CommandStart
 from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
-from flask import Flask
-from threading import Thread
 import asyncio
+import threading
+from flask import Flask
 
-# 🔑 Твій токен бота
-BOT_TOKEN = "8227383457:AAHskX1GQRZ9hmoytkMHiNf1lTxVvxNLHYc"
+# 🔑 Твій токен
+BOT_TOKEN = "ВСТАВ_СЮДИ_СВІЙ_ТОКЕН"
 
-# 🔹 Flask-сервер для Render
-app = Flask('')
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher()
+
+# 🔹 Flask сервер для Render
+app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "✅ Bot is alive!"
+    return "✅ Bot is running!"
 
-def run_web():
-    app.run(host='0.0.0.0', port=8080)
-
-# 🔹 Створюємо бота і диспетчер
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+def run_flask():
+    app.run(host="0.0.0.0", port=10000)
 
 # 🔹 Обробник команди /start
 @dp.message(CommandStart())
 async def start_handler(message: types.Message):
     username = message.from_user.first_name or "друже"
-
-    # Кнопка з посиланням
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="🎁 Забрати бонус", url="https://trackmyaff.com/?serial=61332575&creative_id=5873")]
-        ]
-    )
-
-    # Фото + підпис
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🎁 Забрати бонус", url="https://trackmyaff.com/?serial=61332575&creative_id=5873")]
+    ])
     photo = FSInputFile("1080x1080-1.jpg")
     caption = f"👋 Привіт, {username}!\n\nРеєструйся за посиланням нижче та забирай круті бонуси від Parik24! 🎁"
-
     await bot.send_photo(chat_id=message.chat.id, photo=photo, caption=caption, reply_markup=keyboard)
 
-# 🔹 Запуск бота
+# 🔹 Головний запуск
 async def main():
     print("✅ Бот запущено!")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    # 🔸 Запускаємо Flask у фоновому потоці
-    Thread(target=run_web).start()
-    # 🔸 Запускаємо Telegram-бота
+    threading.Thread(target=run_flask).start()
     asyncio.run(main())
