@@ -1,3 +1,4 @@
+import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import CommandStart
 from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
@@ -5,8 +6,8 @@ import asyncio
 import threading
 from flask import Flask
 
-# 🔑 Твій токен
-BOT_TOKEN = "ВСТАВ_СЮДИ_СВІЙ_ТОКЕН"
+# 🔑 Отримуємо токен із секретів GitHub
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
