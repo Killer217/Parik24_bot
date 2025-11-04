@@ -7,7 +7,7 @@ import threading
 from flask import Flask
 
 # 🔑 Отримуємо токен із секретів GitHub
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("8227383457:AAFgWQhkJpbCvYT-nJEI8r01UTaGlkxMFWQ")
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
